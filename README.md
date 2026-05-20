@@ -1112,4 +1112,4 @@ void creditos() {
 </details>
 
 ## Conclusiones
-#### Proyecto impulsado por el trabajo en equipo, se interactuo con los recursos impartidos en clase (variables, bucles, funicones, etc..). Al ser un proyecto tan masivo la corrección constante fue muy importante y necesaria. 
+#### Proyecto impulsado por el trabajo en equipo, se interactuo con los recursos impartidos en clase (variables, bucles, funicones, etc..). Al ser un proyecto tan masivo la corrección constante fue muy importante y necesaria. Con el tiempo dado se alcanzó a poptimizar el código para que su desempeño no se vea vulnerado por errores de código. 
