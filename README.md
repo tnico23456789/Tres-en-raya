@@ -5,42 +5,227 @@
 #### Julián Gamarra
 #### Nicolás Torres
 ## **_Descripción del proyecto_** 
-#### El juego es una fusión de dos clásicos: El buscaminas y el tres en raya, acoplados a un sistema aleatorio de cartas que dicta ciertas ventajas o desventajas al usuario en su siguiente turno, entre las cuales estan: **Perdida de turno** **Roba un espacio** **Turno extra** etc... Al elegir la carta de **MINA** el jugador acreedor puede colocar una mina en cualquiera de las posiciones libres del tablero, si el jugador siguiente coloca su ficha en la misma posición, EXPLOTAAAA!!!!! y automáticamente pierde el juego.
-## Victoria
-#### Además de la carta MINA, un jugador gana si completa una linea de 3 (ya sea vertical, horizontal o diagonal) de su fichacorrespondiente X o O
-## Empate
-#### Cuando el tablero se completo y ninguno de los 2 jugadores completo una fila, una columna o una diagonal con 3 de su respectiva ficha. Existe la opción de jugar una nueva ronda indefinidamente hasta que cualquiera de los dos gane, incluso si un de los dos gana pueden seguir juganndo y esa partida se va registrando en un contador de cuantas rondas ganadas va cada jugador.
-## Derrota
-#### Cuando un jugador explota l amina ubicada por su oponente o su oponente completa una fila, columna o diagonal con 3 de sus fichas
+#### El juego es una fusión de dos clásicos: El buscaminas y el tres en raya, acoplados a un sistema aleatorio de cartas que dicta ciertas ventajas o desventajas al usuario en su siguiente turno, entre las cuales estan: **Perdida de turno** **Roba un espacio** **Turno extra** etc... Cada jugador deberá colocar sus fichas (X y O) intentando completar una línea de 3 símbolos iguales, pero después de cada turno podrá escoger una carta especial que puede cambiar completamente el rumbo de la partida, lo que lo hace completamente IMPREDECIBLE!!!
+## 🥇 Victoria
+#### Un jugador gana si:
+#### Forma una línea de 3 símbolos iguales (horizontal, vertical o diagonal).
+## 🤝 Empate
+#### Cuando el tablero se completo y ninguno de los 2 jugadores completo una fila, una columna o una diagonal con 3 de su respectiva ficha. Existe la opción de jugar una nueva ronda indefinidamente hasta que cualquiera de los dos gane, incluso si un de los dos gana pueden seguir juganndo.
+## 🥈 Derrota
+#### Un jugador pierde cuando:
+#### El rival completa una línea ganadora (VERTICAL, HORIZONTAL O DIAGONAL).
 ## CÓDIGO EJECUTABLE (con comentarios explicativos)
-### Color
-#### Es una parte complementaria visual del código que no interfiere como tal en la jugabilidad o fluidez del código pero aporta estética visual al juego.
+# 🧩 Explicación de las partes más importantes del código
+
+## 🎮 Menú principal
+
+#### Esta parte del código se encarga de mostrar el menú principal del juego.  
+#### Permite al usuario escoger entre jugar, leer las reglas, ver los créditos o salir del programa.  
+#### Se utiliza un `switch` junto a un bucle `do while` para mantener el menú activo hasta que el jugador decida cerrar el juego.
+
 <details>
-<summary>📌 Mostrar código de color fuente</summary>
+<summary>📌 Mostrar código del menú principal</summary>
 
-  ```cpp
-#include <iostream>
-using namespace std;
+```cpp
+do {
+    system("cls");
 
-int main() {
+    cout<<"==================================="<<endl;
+    cout<<"   TRES EN RAYA... CON CARTAS!!!"<<endl;
+    cout<<"==================================="<<endl;
+    cout <<"\n";
 
-    for(int i = 0; i < 256; i++) {
+    cout << "1. Jugar\n";
+    cout << "2. Reglas\n";
+    cout << "3. Creditos\n";
+    cout << "4. Salir\n\n";
 
-        cout << "\033[38;5;" << i << "m";
+    cout << "Opcion: ";
+    cin >> opcion;
 
-        cout << "Color " << i << "\n";
+    switch(opcion) {
+
+        case 1:
+            jugar();
+            break;
+
+        case 2:
+            reglas();
+            break;
+
+        case 3:
+            creditos();
+            break;
+
+        case 4:
+            cout << "\nCerrando juego...\n";
+            cout << "\nCHAOO\n";
+            break;
+
+        default:
+            cout << "\nOpcion invalida\n";
+            system("pause");
     }
 
-    
-    cout << "\033[0m";
-    system("pause"); 
-    return 0;
-}
+} while(opcion != 4);
 ```
 
 </details>
 
-### Código final
+## Inicialización del tablero
+
+#### Aquí se crean las matrices principales del juego:
+- `tabla` → almacena las fichas X y O.
+- `bloqueo` → controla las casillas bloqueadas.
+- `minas` → guarda los efectos aleatorios de las cartas.
+
+#### Luego se rellenan las casillas vacías con el símbolo `-`.
+
+<details>
+<summary>📌 Mostrar código de inicialización del tablero</summary>
+
+```cpp
+int anticheat,vj=1,aux3=0,aux2=1,ext=0,prof1=4,proc1=4,prof2=4,proc2=4,fila1,columna1,fila2,columna2,ini=0,ctd=0,ctd2=0,ctd3=0,filamina=0;
+  char tabla[3][3];
+  char bloqueo[3][3];
+  int minas[3][3];
+  char j1='x',j2='o',aux;
+
+
+
+
+  int ganar=0;
+  cout<<"==================================="<<endl;
+  cout<<"   TRES EN RAYA... CON CARTAS!!!"<<endl;
+  cout<<"==================================="<<endl;
+  cout <<"\n";
+  
+  /*Se inicializan las tablas con el valor de tres*/
+  tabla[3][3];
+  minas[3][3];
+  bloqueo[3][3];
+
+
+  /*Relleno de las matrices con elementos */
+  /*Matriz de Tablero*/
+  for (int i = 0; i < 3; i++)
+  {
+      for (int j = 0; j < 3; j++)
+      {
+          tabla[i][j]={'-'};
+      }
+  }
+  /*Matriz de Cartas*/
+  
+  /*Matriz para la funcion de Bloqueo*/
+  for (int i = 0; i < 3; i++)
+  {
+      for (int j = 0; j < 3; j++)
+      {
+          bloqueo[i][j]={'-'} ;
+      }
+  }
+
+
+```
+</details>
+
+## ♠️♥️♦️♣️ Sistema de cartas aleatorias
+#### Después de cada turno el jugador puede escoger una carta.
+#### El sistema genera números aleatorios utilizando `rand()` ![#f03c15](https://placehold.co/15x15/f03c15/f03c15.png) (sirve para generar números enteros pseudoaleatorios (números al azar) en un rango desde 0 hasta una constante llamada RAND_MAX).  y `srand(time(0))` ![#1589F0](https://placehold.co/15x15/1589F0/1589F0.png)  **(sirve para inicializar la semilla del generador de números pseudoaleatorios. para asignar efectos especiales).**
+#### Dependiendo del número obtenido se activa:
+#### - 💥Explosión
+#### - 💸Robo
+#### - 🛡️Escudo
+#### - ❌Bloqueo
+#### - ✌️Doble turno
+<details> 
+<summary>📌 Mostrar código del sistema de cartas</summary>
+
+  ```cpp
+for (int i = 0; i < 3; i++)
+{
+    for (int j = 0; j < 3; j++)
+    {
+        srand(time(0));
+        int naleatorio = rand() % 5 + 1 ;
+        minas[i][j]={naleatorio} ;
+    }
+}
+
+aux3 = minas[filaCarta][columnaCarta];
+
+if(aux3 == 1){
+
+    cout<<"BOOOM!!!!"<<endl;
+    cout<<"TE TOCO EXPLOSION!!" <<endl;
+
+}else if(aux3 == 2){
+
+    cout<<"ROBO!!!"<<endl;
+
+}else if(aux3 == 3){
+
+    cout<<"ESCUDO!!!!"<<endl;
+
+}else if(aux3 == 4){
+
+    cout<<"BLOQUEO!!!!"<<endl;
+
+}else if(aux3 == 5){
+
+    cout<<"DOBLE TURNO!!!!"<<endl;
+}
+```
+</details>
+
+## 🏆 Verificación de victoria
+#### Esta parte verifica si un jugador logró completar una línea de 3 símbolos iguales.
+#### El código revisa:
+#### Filas
+#### Columnas
+#### Diagonales
+#### Si detecta tres X o tres O, el juego termina declarando al ganador.
+#### Los detecta a traves de bucles `for` y condicionales `If`, `Else if` & `Else`
+<details>
+<summary>📌 Mostrar código  fuente</summary>
+  
+  ```cpp
+ //Ganar filas
+      /*Este bucle verifica si hay tres X o O en una fila para activar la win por parte del jugador correspondiente para ello recorre cada fila
+      con un contador el cual empieza en cero y suma mas 1 si esque detecta una X o O en la fila*/
+
+      for (int i = 0; i < 3; i++){
+          ctd = 0;
+          ctd2 = 0;
+          for (int j = 0; j < 3; j++)
+          {
+              aux = tabla[i][j];
+              if(aux == 'x'){
+                  ctd +=1;
+                  ctd2 =0;
+              }else if(aux == 'o'){
+                  ctd2 +=1;
+                  ctd =0;
+              }
+          }
+              if(ctd == 3){
+                  cout<<"JUGADOR |x| GANA!!"<<endl;
+                  ganar=1;
+                  break;
+              }else if( ctd2 == 3){
+                  cout<<"JUGADOR |o| GANA!!"<<endl;
+                  ganar=1;
+                  break;
+              }else{
+                  ctd = 0;
+                  ctd2 = 0;
+              }  
+      }
+```
+</details>
+
+## 🏁 Código final
 <details>
 <summary>📌 Mostrar código  fuente</summary>
   
@@ -1112,4 +1297,5 @@ void creditos() {
 </details>
 
 ## Conclusiones
-#### Proyecto impulsado por el trabajo en equipo, se interactuo con los recursos impartidos en clase (variables, bucles, funicones, etc..). Al ser un proyecto tan masivo la corrección constante fue muy importante y necesaria. Con el tiempo dado se alcanzó a poptimizar el código para que su desempeño no se vea vulnerado por errores de código. 
+#### Proyecto impulsado por el trabajo en equipo y el autoaprendizaje sumado a las enseñanzas inpartidas en clase, se interactuo con los recursos estudiados en clase (variables, bucles, funicones, etc..). Al ser un proyecto tan masivo la corrección constante fue muy importante y necesaria. Con el tiempo dado se alcanzó a optimizar el código para que su desempeño no se vea vulnerado por errores de código. Además, el trabajo en equipo fue clave para desarrollar una idea más ambiciosa y divertida que un Tres en Raya tradicional. La constante corrección de errores y optimización ayudó a mejorar tanto la jugabilidad como la estabilidad del código final.
+El resultado fue un juego dinámico, caótico y entretenido que combina estrategia y suerte en cada ronda.
