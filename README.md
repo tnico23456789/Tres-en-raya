@@ -5,7 +5,7 @@
 #### Julián Gamarra
 #### Nicolás Torres
 ## **_Descripción del proyecto_** 
-#### El juego es una fusión de dos clásicos: El buscaminas y el tres en raya, acoplados a un sistema aleatorio de cartas que dicta ciertas ventajas o desventajas al usuario en su siguiente turno, entre las cuales estan: **Perdida de turno** **Roba un espacio** **Turno extra** etc... Cada jugador deberá colocar sus fichas (X y O) intentando completar una línea de 3 símbolos iguales, pero después de cada turno podrá escoger una carta especial que puede cambiar completamente el rumbo de la partida, lo que lo hace completamente IMPREDECIBLE!!!
+#### El juego es una fusión: Una base de un tres en raya clásico, acoplado a un sistema aleatorio de cartas que dicta ciertas ventajas o desventajas al usuario en su siguiente turno, entre las cuales están: **Perdida de turno**, **Roba un espacio**, **Turno extra** etc... Cada jugador deberá colocar sus fichas (X y O) intentando completar una línea de 3 símbolos iguales, pero después de cada turno podrá escoger una carta especial que puede cambiar completamente el rumbo de la partida, lo que lo hace completamente IMPREDECIBLE!!!
 ## 🥇 Victoria
 #### Un jugador gana si:
 #### Forma una línea de 3 símbolos iguales (horizontal, vertical o diagonal).
