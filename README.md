@@ -143,39 +143,209 @@ int anticheat,vj=1,aux3=0,aux2=1,ext=0,prof1=4,proc1=4,prof2=4,proc2=4,fila1,col
 <summary>📌 Mostrar código del sistema de cartas</summary>
 
   ```cpp
-for (int i = 0; i < 3; i++)
-{
-    for (int j = 0; j < 3; j++)
-    {
-        srand(time(0));
-        int naleatorio = rand() % 5 + 1 ;
-        minas[i][j]={naleatorio} ;
+//  MECANICA EXTRA CARTAS 
+        /*Aqui comienza con la lógica de programacion de la implmentación en este caso despues de poner su X o O  tiene la opcion de elegir entre 9 
+        cartas que pueden tener 5 efectos posibles*/ 
+        aux2=1;
+        aux3=0;
+        do{
+            cout<<"-----------------------------"<<endl;
+            cout<<"<<<<<<<<<<<CARTA!!>>>>>>>>>>>"<<endl;
+            cout<<"-----------------------------"<<endl;
+            cout<<"Elige tu carta [1 - 9]: ";cin>>filamina;cout<<"\n"; 
+            if(filamina >=1 and filamina<=9){
+                ini = 0;
+            }else{
+                ini = 1;
+            }
+            filamina--;
+        }while( ini != 0 );
+        /*Esta linea transforma el numero ingresado por el usuario para traducirlo a una posicion en la matriz de cartas primero divide para 3
+        para sacar las filas y el residuo o el MOD indica la columna de la matriz*/
+        int filaCarta = filamina / 3;
+        int columnaCarta = filamina % 3;
+        /* Aqui se esta ocupando la funcion srand para la generacion de nuemros aleatorios usando una semilla de tiempo 0*/
+        for (int i = 0; i < 3; i++)
+        {
+            for (int j = 0; j < 3; j++)
+            {   srand(time(0));
+                int naleatorio = rand() % 5 + 1 ;
+                minas[i][j]={naleatorio} ;
+            }
+        }
+
+        aux3 = minas[filaCarta][columnaCarta];
+
+        /*Aqui empiezan los 5 efectos posibles*/
+        if(aux3 == 1){
+            //EXPLOSION!
+            /*Aqui comienza el primer efecto explosion hace que el jugador pierda la ultima ficha que puso utiliza un condicional que lee la utlima casilla basada
+            en la ultima entrada del jugador*/
+
+            if (anticheat==1)
+            {
+            /*Esta condicion verifica si el jugador esta intentando sacar doble turno muchas veces por lo cual lo penaliza*/
+                cout<<"TRAMPOSO!! no puedes tener turnos infinitos :("<<endl;
+            }
+            
+            cout<<"BOOOM!!!!"<<endl;
+            cout<<"TE TOCO EXPLOSION!!" <<endl;
+            cout<<"La ultima |x| sera destruida"<<endl;
+            if ((fila1 == prof2) and (columna1 == proc2)){
+                cout<<"ESCUDO ACTIVADO!!"<<endl;
+                cout<<"Tu casilla estaba protegida por el ESCUDO!!"<<endl;
+                prof1=4;proc1=4;          
+            }else{
+            tabla[fila1][columna1] = {'-'};
+            }
+            cout <<"\n"; 
+
+        }else if(aux3== 2){
+            //ROBO!
+            /*Con esta carta puedes robar la posicion del enemigo en este caso el O del enemigo para el jugador 2 sera alrevez pero con la misma lógica*/
+            int ctd4 = 0;
+            /*Este bucle for anidado verifica que exista un O que robar en caso no lo haya pierde su carta*/
+            for (int i = 0; i < 3; i++){
+                for (int j = 0; j < 3; j++)
+                {
+                    aux = tabla[i][j];
+                    if (aux == 'o'){
+                        ctd4 +=1;
+                    }
+                }    
+            }
+            cout<<"ROBO!!!"<<endl;
+            if (ctd4>=1)
+            {
+                /*Aqui muestra el tablero actual mediante un bucle for como al principio*/
+                
+                cout<<"Puedes robar una ficha de tu oponente"<<endl;
+                for (int i = 0; i < 3; i++)
+                    {
+                    if (i == 0){
+                        cout<< "  c1  c2  c3 " << endl; 
+                    }
+                    cout<< "f" << i + 1<< " "; 
+                    for (int j = 0; j < 3; j++)
+                    {
+                        
+                        cout<<tabla[i][j];
+                        if (j < 2){
+                            cout<< " | ";
+                        }
+                    }
+                    cout <<"\n";
+                    if (i < 2){
+                        cout<< "  ---|---|---" << endl;
+                    }    
+                }
+                /*Aqui pregunta donde desea su respectiva*/
+                cout <<"\n";
+                cout<<"Elije una casilla para robar la |x|"<<endl;
+                do{
+                cout<<"Elije una fila [1-3]"<<endl;
+                cin >> fila1;
+                if(fila1 >=1 and fila1<=3){
+                    ini = 0;
+                }else{
+                    ini = 1;
+                }
+                cout<<"Elije una columna [1-3]"<<endl;
+                cin >> columna1;
+                if(columna1 >=1 and columna1<=3){
+                    ini = 0;
+                }else{
+                    ini = 1;
+                }
+                    fila1 --;
+                    columna1 --;
+                if(tabla[fila1][columna1] == '-' or tabla[fila1][columna1] == 'x' ){
+                    cout<<"CASILLA NO VALIDA :("<<endl;
+                    ini = 1;
+                }else{
+                    cout<<"CASILLA VALIDA :)"<<endl;
+                    ini = 0;
+                }    
+                }while( ini != 0 );
+                /*Esta linea verifica si una casilla esta protegida otra de las cartas qeu se explicara despues*/
+                if (((fila1 == prof2) and (proc2 == columna1))){
+                    cout<<"ESCUDO ACTIVADO!!"<<endl;
+                    cout<<"La casilla del oponente estaba protegida por el ESCUDO!!"<<endl;
+                    prof2=4;proc2=4;
+                }else{
+                tabla[fila1][columna1] = {'x'};
+                }
+            }else{
+                cout<<"MALA SUERTE!!!!"<<endl;
+                cout<<"Aun no hay ningun |o| que robar"<<endl;
+                cout<<"PIERDES LA CARTA :("<<endl;
+            }
+            cout <<"\n"; 
+            
+
+        }else if(aux3 == 3){
+            //ESCUDO
+            /*Esta carta escudo permite al jugador defender su ultima X puesta o O dependiendo del jugador que este en su turno*/
+            cout<<"ESCUDO!!!!"<<endl;
+            cout<<"Tu ultima |x| sera PROTEGIDA"<<endl;
+            prof1 = fila1;
+            proc1 = columna1;
+
+        }else if(aux3 == 4){
+            //BLOQUEO
+            /*Esta carta permite poner un bloqueo en una casilla para que el otro jugador no pueda poner su X o O respectivamente*/
+            cout<<"BLOQUEO!!!!"<<endl;
+                cout <<"\n";
+                cout<<"Elije una casilla para bloquear a tu oponente"<<endl;
+                do{
+                cout<<"Elije una fila [1-3]"<<endl;
+                cin >> fila1;
+                if(fila1 >=1 and fila1<=3){
+                    ini = 0;
+                }else{
+                    ini = 1;
+                }
+                cout<<"Elije una columna [1-3]"<<endl;
+                cin >> columna1;
+                if(columna1 >=1 and columna1<=3){
+                    ini = 0;
+                }else{
+                    ini = 1;
+                }
+                    fila1 --;
+                    columna1 --;
+                /*Esta linea verifica si la casilla ya esta ocupada para no permitir el bloqueo de la misma*/
+                if(bloqueo[fila1][columna1] == '+'){
+                    cout<<"CASILLA NO VALIDA :("<<endl;
+                    ini = 1;
+                }else{
+                    cout<<"CASILLA VALIDA :)"<<endl;
+                    ini = 0;
+                }
+                }while( ini != 0 );    
+            bloqueo[fila1][columna1] = {'*'};
+            cout <<"\n"; 
+
+        }else if(aux3 == 5){
+            //DOBLE TURNO
+            /*El nombre lo dice permite repetir el bucle en el qeu esta el jugador 1 para tener un doble turno*/
+            cout<<"DOBLE TURNO!!!!"<<endl;
+            cout<<"Tienes un turno extra"<<endl;
+            ext=0;
+            cout <<"\n";
+            minas[filaCarta][columnaCarta] = 1 ;
+            anticheat = 1;
+        }        
+        //
+        filamina = 0 ;
+        
+    }while(ext!=1);/*Complemento del bucle Do-While de arriba el que maneja el bucle del jugador 1*/
+    
+    anticheat=0;//Esta linea reestablece el anticheat para que no salga el mismo mensaje a cada rato y sin necesidad
+    if(ganar ==1){
+        break;
     }
-}
-
-aux3 = minas[filaCarta][columnaCarta];
-
-if(aux3 == 1){
-
-    cout<<"BOOOM!!!!"<<endl;
-    cout<<"TE TOCO EXPLOSION!!" <<endl;
-
-}else if(aux3 == 2){
-
-    cout<<"ROBO!!!"<<endl;
-
-}else if(aux3 == 3){
-
-    cout<<"ESCUDO!!!!"<<endl;
-
-}else if(aux3 == 4){
-
-    cout<<"BLOQUEO!!!!"<<endl;
-
-}else if(aux3 == 5){
-
-    cout<<"DOBLE TURNO!!!!"<<endl;
-}
+    /*Antes de empezar el turno del jugador 2 esta condición verifica si existe un jugador que haya ganadao temrinando el juego con el bucle principal*/
 ```
 </details>
 
