@@ -1436,7 +1436,7 @@ void reglas() {
 }
 
 
-//creditos :)))jnsjnsa
+//creditos 
 
 void creditos() {
 
