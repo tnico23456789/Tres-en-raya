@@ -1,4 +1,4 @@
-# **BUSCAMINAS EN RAYA (TRES EN RAYA + BUSCAMINAS)** 👌
+# **CARTAS EN RAYA** ❌⭕
 ## **_Integrantes_**
 #### Paul Moreno
 #### Zaid Jaramillo
