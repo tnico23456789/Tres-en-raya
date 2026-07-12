@@ -1469,11 +1469,252 @@ void creditos() {
 ```
 
 </details>
-
-</details>
-
-## Descripción del avance del proyecto
-#### Debido al gran avance adquirido en el proyecto base (Tres en raya), se optó por la ampliación de la selección de videojuegos en el apartado del menú. Por 
 ## Conclusiones
 #### Proyecto impulsado por el trabajo en equipo y el autoaprendizaje sumado a las enseñanzas inpartidas en clase, se interactuo con los recursos estudiados en clase (variables, bucles, funicones, etc..). Al ser un proyecto tan masivo la corrección constante fue muy importante y necesaria. Con el tiempo dado se alcanzó a optimizar el código para que su desempeño no se vea vulnerado por errores de código. Además, el trabajo en equipo fue clave para desarrollar una idea más ambiciosa y divertida que un Tres en Raya tradicional. La constante corrección de errores y optimización ayudó a mejorar tanto la jugabilidad como la estabilidad del código final.
 El resultado fue un juego dinámico, caótico y entretenido que combina estrategia y suerte en cada ronda.
+</details>
+
+## Descripción del avance del proyecto
+#### Debido al gran avance adquirido en el proyecto base (Tres en raya), se optó por la ampliación de la selección de videojuegos en el apartado del menú. El juego escogido fue el Buscaminas, un vieoujuego clásico que todos hemos escuchado. Se realizó una répica clásica de este famoso juego, sumando la selección de dificultad y el tamaño del tablero de preferencia del jugador.
+## Buscaminas
+#### El objetivo es despejar un tablero de casillas ocultas sin detonar ninguna mina. Al hacer clic en un cuadro, si revela un número, este indica cuántas minas hay en las 8 casillas circundantes (todas las casillas alrededor).
+## 🥇 Victoria
+#### Un jugador gana si:
+#### Coloca correctamente todas las benderas sobre las minas, sin seleccionar ninguna de ellas.
+## 🥈 Derrota
+#### Un jugador pierde cuando:
+#### Estalla una mina.
+## CÓDIGO EJECUTABLE (con comentarios explicativos)
+# 🧩 Explicación de las partes más importantes del código
+## INCLUSIÓN DE LIBRERIAS EXTRAS 📚
+#### Además de las librerias `<iostream>`, `<cstdlib>` y `<ctime>` utilizadas en el codigo para la creación de herramientas aleatorias y el aspecto visual del juego para una buena experiencia del usuario.
+#### Se añado una cuarta librería `<conio.h>`, libreía que permite manipular la interfaz de la consola de texto en lenguajes como `C` y `C++`. Se utiliza para leer teclas individuales sin necesidad de presionar `Enter` (getch), detectar si se ha pulsado una tecla (kbhit), borrar la pantalla (clrscr) y posicionar el cursor en coordenadas específicas (gotoxy). Nos enffocamos en el uso de la función `clrscr`, refresca la pantalla inmediatamente el jugador hace una acción, el ejecutable no se "forma" ni se "apila", la pantalla permanece en tiempo real dando una sensación de fluidez muy agrdable para el jugador.
+## Estructuras definidas ('structs') 
+#### Una ventaja muy clara de las structs esta en que permite ocupar datos de distintos tipos y definirlas en una misma "variable". Aprovechando fueron definidas dos structs que nos ayudan manejar los elementos que ocupamos en el videojuego (minas, espacios vacios, numeros que indican minas alrededor, incognitas (lugares sin revelar) y banderas).
+#### Los hemos separado en dos structs debido a que, un grupo de estos elementos no van a ser vistos como tal en el programa que son: minas, espacios vacios y numeros sin revelar.
+#### El jugador al iniciar la partida va a encontra unicamnete visibles: cantidad de banderas disponibles y los espacios sin revelar.
+
+<details>
+<summary>📌 Mostrar libreria (objetos visibles) </summary>
+    
+  ```cpp
+typedef struct
+{
+    string inc = "?";
+    string bandera = "/";
+}tIcono2;
+
+```
+#### Esta estructura contiene los símbolos visibles para el jugador durante la partida.
+
+#### Incluye dos elementos:
+
+#### `inc ("?")`: representa una casilla aún sin descubrir.
+#### `bandera ("/")`: representa una bandera colocada por el jugador para marcar una posible mina.
+
+#### De esta manera se mantiene separado el tablero real del tablero que observa el jugador.
+</details>
+
+<details>
+<summary>📌 Mostrar libreria (objetos invisibles) </summary>
+    
+  ```cpp
+typedef struct
+{
+    string mina = "*";
+    string vacio = " ";
+    string numina;
+
+}tIcono
+
+```
+
+#### Sus atributos son:
+
+#### `mina`: representa una mina mediante el carácter "*".
+#### `vacio`: representa una casilla sin minas alrededor utilizando un espacio en blanco.
+#### `numina`: almacena el número de minas adyacentes convertido a una cadena (string).
+
+El uso de esta estructura evita escribir los mismos símbolos repetidamente a lo largo del código, facilitando futuras modificaciones.
+</details>
+
+## Inicialización del tablero
+### Variables principales del juego
+  ```cpp
+int num,win=0,seguir=0;
+int filacu = 0,columnacu = 0,ctdminas = 0,ctdwin = 0, dificultad = 1,aux=0;
+  ```
+#### Estas variables controlan el estado de la partida:
+
+#### `num`: tamaño del tablero.
+#### `win`: almacena el estado de la partida (en curso, victoria o derrota).
+#### `seguir`: determina si el jugador desea iniciar otra partida.
+#### `filacu y columnacu`: posición actual del cursor dentro del tablero.
+#### `ctdminas`: cantidad de minas presentes o banderas disponibles.
+#### `ctdwin`: número total de minas, utilizado para verificar la victoria.
+#### `dificultad`: porcentaje de minas que tendrá el tablero.
+#### `aux`: variable de apoyo para validar entradas del usuario.
+### Creación de los tableros
+```cpp
+string mapa[100][100];
+string mapaqseve[100][100];
+```
+#### El juego utiliza dos matrices independientes:
+
+#### `*mapa*` almacena la información real del tablero, incluyendo minas, espacios vacíos y números.
+#### `*mapaqseve*` representa el tablero visible para el jugador, ocultando inicialmente todas las casillas.
+
+#### Esta separación permite mantener oculta la información del tablero hasta que el jugador descubra cada casilla.
+### TAMAÑO Y DIFICULTAD DEL TABLERO 
+#### Antes de iniciar el juego, el usuario debe elegir el tamaño del tablero y seleccionar la dificultad de la partida. Los datos de entrada de la dificultad que ingresen dictan la probabilidad de aparición de una casilla por cada espacio del tablero, entre mas alto el numero mas probable es la aparición de una mina en cualquiera de las casillas, asi si el jugador escoge un numero muy grande (entre el rango definido de dificultad por el programdor). 
+```cpp
+        dificultad=1;
+        cout<<"Eliga la Medida de la matriz :)"<<endl;
+        cin>>num;
+        do{
+        cout<<"Ingrese Dificultad (1%-75%)"<<endl;
+        cin>>dificultad;
+        if( dificultad<=0 or dificultad>75){
+            aux=0;    
+        }else{
+            aux=1;
+        }
+        }while(aux==0);
+```
+
+
+#### A diferencia del codigo de Tres en raya, llenar el tablero del buscaminas requiere realizar la accion de llenar varias veces:
+#### 1. Llenar las minas basandose en la dificultad que escogió el jugador.
+#### Llamamos a la función:
+```cpp
+llenarmatriz(mapa,num,dificultad);
+```
+```cpp
+
+void llenarmatriz(string matriz[][100],int num,int num2){
+    int x,z,y,ctd=0;
+    tIcono mapa1;
+    for(int i = 0; i<num;i++){
+        for(int e = 0; e<num;e++){
+            z = numaleatorio(100);
+            if( z <= num2){
+                matriz[i][e]= mapa1.mina;
+            }else {
+                matriz[i][e]= mapa1.vacio;
+            }
+        }
+    }
+    for(int i = 0; i<num;i++){
+        for(int e = 0; e<num;e++){
+            z = numaleatorio(100);
+            if( matriz[i][e]== mapa1.mina){
+                ctd++;
+            }
+        }
+    }
+    if (ctd==0){
+        x = numaleatorio(num);
+        y = numaleatorio(num);
+        matriz[x][y]= mapa1.mina;
+    }
+    
+}
+```
+#### Funcion numaleatorio
+```cpp
+int numaleatorio(int num){
+    
+    return rand()%num;
+}
+```
+#### Funcion que arroja un numero al azar gracias a la librería `<ctime>`.
+#### 2. Llenar alrededor de las minas los numeros que indican la cantidad de las mismas alrededor 
+#### Llamamos a la función:
+```cpp
+llenarmatriznumeros(mapa,num);
+```
+#### Esta función recorre todo el tablero una vez que las minas ya fueron colocadas. Su objetivo es calcular cuántas minas existen alrededor de cada casilla y almacenar ese número en el tablero.
+Las casillas que contienen una mina no son modificadas, mientras que las casillas vacías reciben el número correspondiente de minas adyacentes.
+```cpp
+void llenarmatriznumeros(string matriz[][100],int num){
+    int x;
+    string z,y;
+    tIcono mapa1;
+    matriz[num][num];
+    for(int i = 0; i<num;i++){
+        for(int e = 0; e<num;e++){
+            x = contarnumeros(matriz,i,e,num);
+            z = to_string(x);
+            mapa1.numina = z;
+            if(x==0){
+                continue;
+            }else{
+                matriz[i][e] = mapa1.numina;
+            }
+        }
+    }
+```
+#### Se utilizan dos ciclos anidados para recorrer cada posición de la matriz. De esta manera, todas las casillas son procesadas individualmente, sin importar el tamaño del tablero.
+#### Para cada casilla se llama a la función contarnumeros(), encargada de contar cuántas minas existen en las nueve posiciones que la rodean.
+El resultado se almacena en la variable x.
+```cpp
+int contarnumeros(string matriz[][100],int i,int e,int num){
+    tIcono mapa1;
+    int ctd=0;
+    if( matriz[i][e] == mapa1.mina){
+        return 0;
+    }else{
+        for (int l =-1; l <= 1; l++)
+        {
+            for (int n =-1; n <= 1; n++)
+            {
+                if((i+l<0 or i+l>num-1) or ( e+n<0 or e+n>num-1)){
+                    continue;
+                }else{
+                    if(matriz[i+l][e+n]==mapa1.mina){
+                        ctd++;
+                    }else{
+                        continue;
+
+                    }    
+                }
+            }
+        }
+        return ctd;
+    }  
+    
+}
+```
+#### 3. Llenar la matriz de simbolos de incógnita `?`. 
+```cpp
+void rellenarmapaqseve(string mapa[][100], int num){
+    tIcono2 mapa2;
+    mapa[num][num];
+    for(int i = 0; i<num;i++){
+        for(int e = 0; e<num;e++){
+            mapa[i][e]=mapa2.inc;
+        }
+    }   
+}
+```
+### IMPRESION DE MAPA
+```cpp
+void imprimirmapa(string mapa[][100], int num,int &filacu,int &columnacu){
+    mapa[num][num];
+    for(int i = 0; i<num;i++){
+        for(int e = 0; e<num;e++){
+            if(i == filacu && e == columnacu)
+            {
+                cout << "|X| ";  
+            }else{
+                cout<<"|"<<mapa[i][e]<<"|"<<" ";
+            }
+        }
+        cout<<"\n";
+    }
+    controles();   
+
+}
+```
+Una funcion que es la que se visualiza en todo el programa, obtenemos 
+
