@@ -1484,7 +1484,6 @@ El resultado fue un juego dinámico, caótico y entretenido que combina estrateg
 ## 🥈 Derrota
 #### Un jugador pierde cuando:
 #### Estalla una mina.
-## CÓDIGO EJECUTABLE (con comentarios explicativos)
 # 🧩 Explicación de las partes más importantes del código
 ## INCLUSIÓN DE LIBRERIAS EXTRAS 📚
 #### Además de las librerias `<iostream>`, `<cstdlib>` y `<ctime>` utilizadas en el codigo para la creación de herramientas aleatorias y el aspecto visual del juego para una buena experiencia del usuario.
@@ -1685,7 +1684,7 @@ int contarnumeros(string matriz[][100],int i,int e,int num){
     
 }
 ```
-#### 3. Llenar la matriz de simbolos de incógnita `?`. 
+#### 3. Llenar la matriz visible del jugador. 
 ```cpp
 void rellenarmapaqseve(string mapa[][100], int num){
     tIcono2 mapa2;
@@ -1697,6 +1696,7 @@ void rellenarmapaqseve(string mapa[][100], int num){
     }   
 }
 ```
+Se llama a esta función al iniciar la partida, su objetivo es llenar la matriz de `?', a medidda que va avanzando el juego estas van despareciendo dependiendo de la seleccion de casilla del usuario y que elementos estan cerca o en la casilla seleccionada.  
 ### IMPRESION DE MAPA
 ```cpp
 void imprimirmapa(string mapa[][100], int num,int &filacu,int &columnacu){
@@ -1716,5 +1716,138 @@ void imprimirmapa(string mapa[][100], int num,int &filacu,int &columnacu){
 
 }
 ```
-Una funcion que es la que se visualiza en todo el programa, obtenemos 
+Aparicion del jugador (|X|), aompañado de una función llamada `controles()`
+```cpp
+void controles(){
+    cout << "===================================" << endl;
+    cout << "              MOVIMIENTO            " << endl;
+    cout << "                  W                  " << endl;
+    cout << "                A S D                " << endl;
+    cout << "Q:Revelar Casilla     E:Poner Bandera" << endl;
+    cout << "===================================" << endl;
+}
+```
+Una funcion que es la que se visualiza en todo el programa y da información al ususario acerca de las teclas destinadas a su juego, dotandole del típico `AWSD` para una experiencia de usuario ideal gracais al subprograma `movimiento()`
+```cpp
+void movimiento(int &filacu, int &columnacu, int num,string mapa[][100], string mapa2[][100],int &win,int &ctdminas)
+{
+    tIcono mapa1;
+    tIcono2 mapave;
+    char tecla = _getch();
 
+    if(tecla == 'a' or tecla == 'A' && columnacu > 0)
+    {
+        columnacu--;
+    }
+    else if(tecla == 'd' or tecla == 'D' && columnacu < num - 1)
+    {
+        columnacu++;
+    }
+    else if(tecla == 'w' or tecla == 'W' && filacu > 0)
+    {
+        filacu--;
+    }
+    else if(tecla == 's' or tecla == 'S' && filacu < num - 1)
+    {
+        filacu++;
+    }
+    else if(tecla == 'q' or tecla == 'Q')
+    {
+        if(mapa[filacu][columnacu] == mapa1.vacio){
+            expansionre(filacu,columnacu,mapa,mapa2,num);
+
+        }else if (mapa[filacu][columnacu] == mapa1.mina) {        
+            mapa2[filacu][columnacu] = mapa[filacu][columnacu];
+            win=1;
+        }else{
+            mapa2[filacu][columnacu] = mapa[filacu][columnacu];
+        }
+
+    }
+    else if(tecla == 'e' or tecla == 'E')
+    {
+        if(mapa2[filacu][columnacu] == mapave.inc){
+            mapa2[filacu][columnacu] = mapave.bandera;
+            ctdminas = ctdminas-1;
+
+        }else if(mapa2[filacu][columnacu] == mapave.bandera){
+            mapa2[filacu][columnacu] = mapave.inc;
+            ctdminas = ctdminas+1;
+        }
+        
+    }
+}
+```
+
+#### Se define la variable "tecla" `char tecla = _getch()`, la funcion `_getch()` espera a que el jugador presione una tecla y almacena el carácter ingresado en la variable tecla.
+La función `_getch()`, perteneciente a la biblioteca `<conio.h>`, tiene dos características importantes:
+
+No requiere presionar Enter, por lo que la acción se ejecuta inmediatamente al pulsar una tecla.
+No muestra el carácter en la consola, evitando que las teclas utilizadas para controlar el juego aparezcan en pantalla.
+
+#### Ademas del movimeinto se definen las teclas `Q` y `E` que son para revelar la casilla y colocar bandera respectivamente en ese orden
+### Funcion `expansionre()`
+#### Esta función implementa la expansión automática de casillas vacías. Cuando el jugador descubre una casilla que no tiene minas alrededor, la función revela también las casillas vacías vecinas de forma recursiva, reproduciendo el comportamiento clásico del Buscaminas.
+```cpp
+void expansionre(int fila,int columna,string mapa[][100],string mapa2[][100],int num){
+    tIcono mapa1; 
+    tIcono2 mapave;
+    for (int h = -1; h <=1 ; h++)
+    {
+        for (int l = -1; l <=1 ; l++)
+        {
+            if (columna+l<0 or fila+h<0 or columna+l>num-1 or fila+h>num-1)
+            {
+                continue;
+            }else{
+                if(mapa2[fila+h][columna+l] == mapave.inc){
+                    if(mapa[fila+h][columna+l]== mapa1.vacio){
+                        mapa2[fila+h][columna+l] = mapa[fila+h][columna+l];
+                        expansionre(fila+h,columna+l,mapa,mapa2,num);
+                    }else{
+                        continue;
+                    }
+                }else{                    
+                    continue;
+                }                    
+                
+            }
+            
+        }
+    }
+    
+```
+### Verificacion de victoria
+```cpp
+void verificadorwin(string matriz[][100],string matriz2[][100],int num,int ctdminas, int &win){
+    tIcono mapa1;
+    tIcono2 mapa2;
+    int ctd =0;
+    for (int i = 0; i < num; i++)
+    {
+        for (int e = 0; e < num; e++)
+        {
+            if(matriz[i][e]==mapa1.mina and matriz2[i][e]==mapa2.bandera){
+                ctd++;
+            }
+        }
+    }
+    if(ctd == ctdminas){
+        win =2 ;
+    }   
+}
+```
+#### Se crea un contador llamado `ctd`, cuya función es registrar cuántas minas han sido marcadas correctamente con una bandera.
+#### La función recorre todas las posiciones del tablero para comparar el contenido del tablero real con el tablero visible.
+#### De esta forma, verifica una por una todas las casillas de la partida.
+#### En cada casilla se comprueba si:
+
+#### - En el tablero real existe una mina ("*"), y
+#### - En el tablero visible el jugador colocó una bandera ("/").
+
+#### Cuando ambas condiciones se cumplen, significa que esa mina fue identificada correctamente, por lo que el contador se incrementa.
+#### Al finalizar el recorrido, se compara la cantidad de minas correctamente marcadas con el número total de minas del tablero.
+
+#### Si ambos valores coinciden, la variable win toma el valor 2, indicando que el jugador ha ganado la partida al localizar correctamente todas las minas.
+### CONCLUSIONES
+#### El desarrollo de este proyecto permitió aplicar de manera práctica los fundamentos de programación en C++, integrando estructuras, funciones, matrices bidimensionales y recursividad para construir un juego completamente funcional. Además, se reforzó la importancia de dividir el programa en subprogramas, facilitando su organización, mantenimiento y comprensión. La implementación de la lógica del Buscaminas también permitió trabajar con validación de datos, generación aleatoria de escenarios e interacción con el usuario mediante el teclado. En conjunto, el proyecto representa una aplicación completa de los conocimientos adquiridos, combinando lógica de programación, resolución de problemas y diseño de algoritmos.
