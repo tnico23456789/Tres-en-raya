@@ -1,10 +1,14 @@
-# **CARTAS EN RAYA** ❌⭕
+# **CARTAS EN RAYA+BUSCAMINAS** ❌⭕ 
 ## **_Integrantes_**
 #### Paul Moreno
 #### Zaid Jaramillo
 #### Julián Gamarra
 #### Nicolás Torres
-## **_Descripción del proyecto_** 
+
+<details>
+<summary>📌 Mostrar Proyecto Primer bimestre</summary>
+    
+## **_Descripción del proyecto inicial_** 
 #### El juego es una fusión: Una base de un tres en raya clásico, acoplado a un sistema aleatorio de cartas que dicta ciertas ventajas o desventajas al usuario en su siguiente turno, entre las cuales están: **Perdida de turno**, **Roba un espacio**, **Turno extra** etc... Cada jugador deberá colocar sus fichas (X y O) intentando completar una línea de 3 símbolos iguales, pero después de cada turno podrá escoger una carta especial que puede cambiar completamente el rumbo de la partida, lo que lo hace completamente IMPREDECIBLE!!!
 ## 🥇 Victoria
 #### Un jugador gana si:
@@ -1466,6 +1470,10 @@ void creditos() {
 
 </details>
 
+</details>
+
+## Descripción del avance del proyecto
+#### Debido al gran avance adquirido en el proyecto base (Tres en raya), se optó por la ampliación de la selección de videojuegos en el apartado del menú. Por 
 ## Conclusiones
 #### Proyecto impulsado por el trabajo en equipo y el autoaprendizaje sumado a las enseñanzas inpartidas en clase, se interactuo con los recursos estudiados en clase (variables, bucles, funicones, etc..). Al ser un proyecto tan masivo la corrección constante fue muy importante y necesaria. Con el tiempo dado se alcanzó a optimizar el código para que su desempeño no se vea vulnerado por errores de código. Además, el trabajo en equipo fue clave para desarrollar una idea más ambiciosa y divertida que un Tres en Raya tradicional. La constante corrección de errores y optimización ayudó a mejorar tanto la jugabilidad como la estabilidad del código final.
 El resultado fue un juego dinámico, caótico y entretenido que combina estrategia y suerte en cada ronda.
