@@ -977,10 +977,11 @@ void buscaminas(){
             verificadorwin(mapa,mapaqseve,num,win);
             imprimirmapa(mapaqseve,num,filacu,columnacu);
             movimiento(filacu,columnacu,num,mapa,mapaqseve,win,ctdminas,primerMovimiento,dificultad);
-            if(primerMovimiento=1){
+            if(primerMovimiento==1){
                 ctdminas = contadorminas(mapa,num);
                 ctdwin = ctdminas;
             }
+            
         }
         if(win == 1){
             cout<<"!BOOOOOOOOM PERDISTE"<<endl;
@@ -1015,7 +1016,6 @@ void llenarmatriz(string matriz[][100],int num,int num2){
     }
     for(int i = 0; i<num;i++){
         for(int e = 0; e<num;e++){
-            z = numaleatorio(100);
             if( matriz[i][e]== mapa1.mina){
                 ctd++;
             }
@@ -1031,18 +1031,20 @@ void llenarmatriz(string matriz[][100],int num,int num2){
 // Calcula los numeros alrededor de cada mina.
 void llenarmatriznumeros(string matriz[][100],int num){
     int x;
-    string z,y;
+    string z;
     tIcono mapa1;
-    matriz[num][num];
-    for(int i = 0; i<num;i++){
-        for(int e = 0; e<num;e++){
+    for(int i=0;i<num;i++){
+        for(int e=0;e<num;e++){
+
+            if(matriz[i][e]==mapa1.mina){
+                continue;
+            }
+
             x = contarnumeros(matriz,i,e,num);
             z = to_string(x);
-            mapa1.numina = z;
-            if(x==0){
-                continue;
-            }else{
-                matriz[i][e] = mapa1.numina;
+
+            if(x!=0){
+                matriz[i][e]=z;
             }
         }
     }
@@ -1094,7 +1096,7 @@ int numaleatorio(int num){
 }
 // Imprime el tablero visible y la posicion del cursor.
 void imprimirmapa(string mapa[][100], int num,int &filacu,int &columnacu){
-    mapa[num][num];
+    
     
     for(int i = 0; i<num;i++){
         for(int i =0;i<num;i++){
@@ -1114,10 +1116,10 @@ void imprimirmapa(string mapa[][100], int num,int &filacu,int &columnacu){
                     cout<<"| \033[32m2\033[0m ";
                 }else if(mapa[i][e]=="3"){
                     cout<<"| \033[36m3\033[0m ";
-                }else if(mapa[i][e]=="3"){
-                    cout<<"| \033[33m3\033[0m ";
-                }else if(mapa[i][e]=="3"){
-                    cout<<"| \033[35m3\033[0m ";
+                }else if(mapa[i][e]=="4"){
+                    cout<<"| \033[34m4\033[0m ";
+                }else if(mapa[i][e]=="5"){
+                    cout<<"| \033[35m5\033[0m ";
                 }
                 else{
                 cout<<"| "<<mapa[i][e]<<" ";
